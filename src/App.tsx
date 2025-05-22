@@ -13,6 +13,7 @@ import PriceProphecy from './components/PriceProphecy';
 import CultInitiation from './components/CultInitiation';
 import BitcoinLore from './components/BitcoinLore';
 import HowToBuy from './components/HowToBuy';
+import ProphecyRoadmap from './components/ProphecyRoadmap';
 import Footer from './components/Footer';
 import BrainwashingLevel from './components/BrainwashingLevel';
 import RealityDistortionField from './components/RealityDistortionField';
@@ -150,6 +151,7 @@ const App: React.FC = () => {
                   />
                   <DiamondHandsTraining />
                   <PriceProphecy />
+                  <ProphecyRoadmap />
                   <CultInitiation />
                   <HowToBuy />
                 </>

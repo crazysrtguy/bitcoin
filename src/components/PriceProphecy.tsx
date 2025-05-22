@@ -435,7 +435,9 @@ const PriceProphecy: React.FC = () => {
                         {part}<ProphecyDate>{prophecy.date}</ProphecyDate>
                       </React.Fragment>
                     );
-                  }).reduce((prev, curr) => [prev, curr])}
+                  }).reduce((prev, curr) => (
+                    <>{prev}{curr}</>
+                  ))}
                 </ProphecyText>
 
                 {sacrificeCount > 1 && (

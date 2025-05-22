@@ -6,9 +6,10 @@
   "homepage": "https://crazysrtguy.github.io/bitcoin",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build && cp public/.nojekyll dist/",
+    "build": "tsc && vite build",
+    "build:github": "tsc && vite build --mode github && cp public/.nojekyll dist/",
     "preview": "vite preview",
-    "predeploy": "npm run build",
+    "predeploy": "npm run build:github",
     "deploy": "gh-pages -d dist"
   },
   "devDependencies": {

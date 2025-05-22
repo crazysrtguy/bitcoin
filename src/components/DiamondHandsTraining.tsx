@@ -51,6 +51,7 @@ const DiamondButton = styled(motion.button)<{ $isHolding: boolean }>`
   background: ${props => props.$isHolding ? 'linear-gradient(135deg, #a0f7ff 0%, #00c2ff 50%, #0078ff 100%)' : '#333'};
   border: none;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   font-family: 'Press Start 2P', cursive;
@@ -58,11 +59,34 @@ const DiamondButton = styled(motion.button)<{ $isHolding: boolean }>`
   color: white;
   cursor: pointer;
   box-shadow: ${props => props.$isHolding ? '0 0 30px rgba(0, 194, 255, 0.8)' : 'none'};
+  -webkit-tap-highlight-color: transparent; /* Remove tap highlight on mobile */
+  touch-action: manipulation; /* Improve touch behavior */
 
   &:before {
     content: '💎';
     font-size: 60px;
     margin-bottom: 10px;
+  }
+
+  @media (max-width: 768px) {
+    width: 150px;
+    height: 150px;
+    font-size: 12px;
+
+    &:before {
+      font-size: 40px;
+      margin-bottom: 5px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    width: 120px;
+    height: 120px;
+    font-size: 10px;
+
+    &:before {
+      font-size: 30px;
+    }
   }
 `;
 
@@ -78,6 +102,13 @@ const EventDisplay = styled(motion.div)`
   font-family: 'VT323', monospace;
   font-size: 1.2rem;
   color: #ff0000;
+
+  @media (max-width: 768px) {
+    padding: 15px;
+    font-size: 1rem;
+    min-height: 80px;
+    margin-top: 20px;
+  }
 `;
 
 const TimerBar = styled.div`
@@ -87,6 +118,11 @@ const TimerBar = styled.div`
   border-radius: 10px;
   margin-top: 20px;
   overflow: hidden;
+
+  @media (max-width: 768px) {
+    height: 15px;
+    margin-top: 15px;
+  }
 `;
 
 const TimerFill = styled(motion.div)`
@@ -104,6 +140,10 @@ const ScoreBar = styled.div`
   overflow: hidden;
   direction: rtl; /* Makes the bar fill from right to left */
   position: relative;
+
+  @media (max-width: 768px) {
+    height: 15px;
+  }
 `;
 
 const ScoreFill = styled(motion.div)<{ $isComplete?: boolean }>`
@@ -120,6 +160,11 @@ const ScoreDisplay = styled.div`
   font-family: 'Press Start 2P', cursive;
   font-size: 18px;
   color: #f7931a;
+
+  @media (max-width: 768px) {
+    font-size: 14px;
+    margin-top: 15px;
+  }
 `;
 
 const RealityLabel = styled.div`
@@ -130,6 +175,15 @@ const RealityLabel = styled.div`
   font-size: 16px;
   color: #ff0000;
   text-align: left;
+
+  @media (max-width: 768px) {
+    font-size: 14px;
+    top: -20px;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 12px;
+  }
 `;
 
 const EnlightenmentLabel = styled.div`
@@ -140,12 +194,21 @@ const EnlightenmentLabel = styled.div`
   font-size: 16px;
   color: #f7931a;
   text-align: right;
+
+  @media (max-width: 768px) {
+    font-size: 14px;
+    top: -20px;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 12px;
+  }
 `;
 
 const Popup = styled(motion.div)<{ $x: number; $y: number; $severity: number }>`
   position: fixed;
-  left: ${props => props.$x}px;
-  top: ${props => props.$y}px;
+  left: ${props => Math.min(Math.max(10, props.$x), window.innerWidth - 250)}px;
+  top: ${props => Math.min(Math.max(10, props.$y), window.innerHeight - 100)}px;
   background: ${props => {
     switch(props.$severity) {
       case 3: return 'linear-gradient(135deg, #ff0000, #990000)';
@@ -157,15 +220,21 @@ const Popup = styled(motion.div)<{ $x: number; $y: number; $severity: number }>`
   padding: 15px 20px;
   border-radius: 10px;
   font-family: 'VT323', monospace;
-  font-size: 18px;
+  font-size: 16px;
   font-weight: bold;
   box-shadow: 0 0 20px rgba(255, 0, 0, 0.6);
   z-index: 50;
-  max-width: 300px;
+  max-width: 250px;
   text-align: center;
   pointer-events: auto;
   border: 2px solid white;
   position: relative;
+
+  @media (max-width: 768px) {
+    max-width: 200px;
+    font-size: 14px;
+    padding: 10px 15px;
+  }
 `;
 
 const CloseButton = styled.button`
@@ -200,6 +269,8 @@ const GameOverModal = styled(motion.div)`
   transform: translate(-50%, -50%);
   width: 90%;
   max-width: 500px;
+  max-height: 90vh;
+  overflow-y: auto;
   background: rgba(0, 0, 0, 0.95);
   border: 3px solid #f7931a;
   border-radius: 15px;
@@ -217,6 +288,10 @@ const GameOverModal = styled(motion.div)`
     color: #f7931a;
     margin-bottom: 20px;
     font-size: 24px;
+
+    @media (max-width: 768px) {
+      font-size: 20px;
+    }
   }
 
   p {
@@ -224,6 +299,11 @@ const GameOverModal = styled(motion.div)`
     margin-bottom: 30px;
     font-size: 16px;
     line-height: 1.6;
+
+    @media (max-width: 768px) {
+      font-size: 14px;
+      margin-bottom: 20px;
+    }
   }
 
   .button-container {
@@ -231,6 +311,11 @@ const GameOverModal = styled(motion.div)`
     gap: 15px;
     justify-content: center;
     width: 100%;
+
+    @media (max-width: 480px) {
+      flex-direction: column;
+      gap: 10px;
+    }
   }
 
   button {
@@ -254,6 +339,11 @@ const GameOverModal = styled(motion.div)`
         background: #555;
       }
     }
+
+    @media (max-width: 768px) {
+      font-size: 12px;
+      padding: 8px 16px;
+    }
   }
 
   .close-x {
@@ -274,6 +364,10 @@ const GameOverModal = styled(motion.div)`
     &:hover {
       color: #ff00ff;
     }
+  }
+
+  @media (max-width: 768px) {
+    padding: 20px;
   }
 `;
 
@@ -458,8 +552,9 @@ const DiamondHandsTraining: React.FC = () => {
   const createDistraction = () => {
     if (!isHolding || !gameActive) return;
 
-    // Limit the number of active popups
-    if (activePopups.length >= 5) {
+    // Limit the number of active popups based on screen size
+    const maxPopups = window.innerWidth < 768 ? 3 : 5;
+    if (activePopups.length >= maxPopups) {
       setActivePopups(prev => prev.slice(1));
     }
 
@@ -471,9 +566,15 @@ const DiamondHandsTraining: React.FC = () => {
     const viewportWidth = window.innerWidth;
     const viewportHeight = window.innerHeight;
 
-    // Generate random position
-    const x = Math.max(50, Math.min(viewportWidth - 300, Math.random() * viewportWidth));
-    const y = Math.max(50, Math.min(viewportHeight - 100, Math.random() * viewportHeight));
+    // Calculate safe margins based on screen size
+    const marginX = viewportWidth < 768 ? 20 : 50;
+    const marginY = viewportHeight < 768 ? 20 : 50;
+    const popupWidth = viewportWidth < 768 ? 200 : 250;
+    const popupHeight = 100;
+
+    // Generate random position with safe margins
+    const x = Math.max(marginX, Math.min(viewportWidth - popupWidth - marginX, Math.random() * viewportWidth));
+    const y = Math.max(marginY, Math.min(viewportHeight - popupHeight - marginY, Math.random() * viewportHeight));
 
     // Create new popup
     const newPopup: Popup = {
@@ -499,21 +600,37 @@ const DiamondHandsTraining: React.FC = () => {
     // Get a random popup message
     const randomPopup = popupMessages[Math.floor(Math.random() * popupMessages.length)];
 
-    // Get the center of the screen (where the button is)
-    const centerX = window.innerWidth / 2;
-    const centerY = window.innerHeight / 2;
+    // Get the button element to find its position
+    const holdButton = document.getElementById('holdButton');
+    let centerX = window.innerWidth / 2;
+    let centerY = window.innerHeight / 2;
+
+    // If we can find the button, use its position
+    if (holdButton) {
+      const rect = holdButton.getBoundingClientRect();
+      centerX = rect.left + rect.width / 2;
+      centerY = rect.top + rect.height / 2;
+    }
+
+    // Calculate safe distance based on screen size
+    const minDistance = window.innerWidth < 768 ? 100 : 150;
+    const maxDistance = window.innerWidth < 768 ? 150 : 300;
 
     // Generate position around the button
     const angle = Math.random() * Math.PI * 2; // Random angle in radians
-    const distance = 150 + Math.random() * 150; // Distance from center (150-300px)
+    const distance = minDistance + Math.random() * (maxDistance - minDistance); // Distance from center
 
     // Calculate position using polar coordinates
     const x = centerX + Math.cos(angle) * distance;
     const y = centerY + Math.sin(angle) * distance;
 
+    // Calculate popup dimensions based on screen size
+    const popupWidth = window.innerWidth < 768 ? 200 : 250;
+    const popupHeight = window.innerWidth < 768 ? 80 : 100;
+
     // Ensure popup is fully visible on screen
-    const safeX = Math.max(50, Math.min(window.innerWidth - 250, x));
-    const safeY = Math.max(50, Math.min(window.innerHeight - 100, y));
+    const safeX = Math.max(10, Math.min(window.innerWidth - popupWidth - 10, x));
+    const safeY = Math.max(10, Math.min(window.innerHeight - popupHeight - 10, y));
 
     // Create new popup
     const newPopup: Popup = {

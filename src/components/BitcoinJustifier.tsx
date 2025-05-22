@@ -80,7 +80,7 @@ const HypnoticCircle = styled(motion.div)`
   margin-bottom: 30px;
   box-shadow: 0 0 50px rgba(247, 147, 26, 0.5);
   animation: ${rotate} 10s linear infinite;
-  
+
   &::before {
     content: '';
     position: absolute;
@@ -92,7 +92,7 @@ const HypnoticCircle = styled(motion.div)`
     );
     animation: ${rotate} 7s linear infinite reverse;
   }
-  
+
   &::after {
     content: '';
     position: absolute;
@@ -119,7 +119,7 @@ const BitcoinLogo = styled.div`
   color: white;
   z-index: 10;
   animation: ${pulse} 2s ease-in-out infinite;
-  
+
   &::before {
     content: '₿';
   }
@@ -141,7 +141,7 @@ const PriceSlider = styled.input`
   border-radius: 10px;
   background: linear-gradient(90deg, #f7931a, #ff0066, #6600ff);
   outline: none;
-  
+
   &::-webkit-slider-thumb {
     -webkit-appearance: none;
     appearance: none;
@@ -152,7 +152,7 @@ const PriceSlider = styled.input`
     cursor: pointer;
     box-shadow: 0 0 10px rgba(247, 147, 26, 0.8);
   }
-  
+
   &::-moz-range-thumb {
     width: 30px;
     height: 30px;
@@ -183,11 +183,11 @@ const BrainwashButton = styled(motion.button)`
   cursor: pointer;
   margin: 20px 0;
   box-shadow: 0 0 20px rgba(247, 147, 26, 0.5);
-  
+
   &:hover {
     background: linear-gradient(45deg, #ff3300, #ff0066);
   }
-  
+
   &:disabled {
     background: #666;
     cursor: not-allowed;
@@ -242,50 +242,50 @@ const BitcoinJustifier: React.FC = () => {
   const [brainwashLevel, setBrainwashLevel] = useState(0);
   const [subliminalMessages, setSubliminalMessages] = useState<{id: number, text: string, x: number, y: number}[]>([]);
   const [messageCounter, setMessageCounter] = useState(0);
-  
+
   const containerRef = useRef<HTMLDivElement>(null);
   const justificationControls = useAnimation();
-  
+
   // Sound effects
   const brainwashSound = new Howl({
     src: ['/brainwash.mp3'],
     volume: 0.5,
     preload: true,
-    onloaderror: (id, error) => console.error("Error loading brainwash sound:", error)
+    onloaderror: (id: number, error: Error) => console.error("Error loading brainwash sound:", error)
   });
-  
+
   // Generate justifications based on target price
   const generateJustifications = () => {
     setIsGenerating(true);
     brainwashSound.play();
-    
+
     // Start showing subliminal messages
     const subliminalInterval = setInterval(() => {
       if (containerRef.current) {
         const width = containerRef.current.offsetWidth;
         const height = containerRef.current.offsetHeight;
-        
+
         const newMessage = {
           id: messageCounter,
           text: ["BUY BITCOIN", "HODL", "MOON SOON", "FIAT IS TRASH", "BITCOIN IS FREEDOM"][Math.floor(Math.random() * 5)],
           x: Math.random() * (width - 200),
           y: Math.random() * (height - 100)
         };
-        
+
         setSubliminalMessages(prev => [...prev, newMessage]);
         setMessageCounter(prev => prev + 1);
-        
+
         // Remove message after a short time
         setTimeout(() => {
           setSubliminalMessages(prev => prev.filter(msg => msg.id !== newMessage.id));
         }, 200);
       }
     }, 300);
-    
+
     // Generate justifications after a delay
     setTimeout(() => {
       const priceFormatted = targetPrice.toLocaleString();
-      
+
       const newJustifications = [
         `Bitcoin will reach $${priceFormatted} because of its limited supply of 21 million coins.`,
         `$${priceFormatted} is inevitable due to institutional adoption and the collapse of fiat currencies.`,
@@ -298,11 +298,11 @@ const BitcoinJustifier: React.FC = () => {
         `The elite don't want you to know that Bitcoin will hit $${priceFormatted} soon.`,
         `$${priceFormatted} is FUD. The real target is $${(targetPrice * 10).toLocaleString()}.`
       ];
-      
+
       setJustifications(newJustifications);
       setIsGenerating(false);
       setBrainwashLevel(prev => Math.min(prev + 20, 100));
-      
+
       // Animate justifications
       justificationControls.start({
         opacity: 1,
@@ -311,12 +311,12 @@ const BitcoinJustifier: React.FC = () => {
           duration: 0.5
         }
       });
-      
+
       // Clear subliminal message interval
       clearInterval(subliminalInterval);
     }, 3000);
   };
-  
+
   return (
     <JustifierSection>
       <JustifierContainer ref={containerRef}>
@@ -328,7 +328,7 @@ const BitcoinJustifier: React.FC = () => {
         >
           Bitcoin Price Justification Machine
         </JustifierTitle>
-        
+
         <JustifierDescription
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -337,12 +337,12 @@ const BitcoinJustifier: React.FC = () => {
         >
           Generate bulletproof arguments for any Bitcoin price target. Convince yourself and others that your price prediction is based on "facts" and "logic".
         </JustifierDescription>
-        
+
         <HypnoticContainer>
           <HypnoticCircle>
             <BitcoinLogo />
           </HypnoticCircle>
-          
+
           <PriceInputContainer>
             <label htmlFor="price-slider" style={{ fontSize: '1.2rem', marginBottom: '10px' }}>
               Select Your Target Bitcoin Price:
@@ -358,7 +358,7 @@ const BitcoinJustifier: React.FC = () => {
             />
             <PriceDisplay>${targetPrice.toLocaleString()}</PriceDisplay>
           </PriceInputContainer>
-          
+
           <BrainwashButton
             onClick={generateJustifications}
             disabled={isGenerating}
@@ -367,20 +367,20 @@ const BitcoinJustifier: React.FC = () => {
           >
             {isGenerating ? "BRAINWASHING IN PROGRESS..." : "GENERATE JUSTIFICATIONS"}
           </BrainwashButton>
-          
+
           {brainwashLevel > 0 && (
             <div style={{ marginTop: '20px' }}>
               <p>Brainwashing Level: {brainwashLevel}%</p>
-              <div style={{ 
-                width: '100%', 
-                height: '10px', 
-                background: '#333', 
+              <div style={{
+                width: '100%',
+                height: '10px',
+                background: '#333',
                 borderRadius: '5px',
                 overflow: 'hidden'
               }}>
-                <div style={{ 
-                  width: `${brainwashLevel}%`, 
-                  height: '100%', 
+                <div style={{
+                  width: `${brainwashLevel}%`,
+                  height: '100%',
                   background: 'linear-gradient(90deg, #f7931a, #ff0066)',
                   transition: 'width 0.5s ease-in-out'
                 }} />
@@ -393,7 +393,7 @@ const BitcoinJustifier: React.FC = () => {
             </div>
           )}
         </HypnoticContainer>
-        
+
         {justifications.length > 0 && (
           <JustificationContainer
             initial={{ opacity: 0, y: 50 }}
@@ -414,7 +414,7 @@ const BitcoinJustifier: React.FC = () => {
             </JustificationList>
           </JustificationContainer>
         )}
-        
+
         {/* Subliminal Messages */}
         {subliminalMessages.map(message => (
           <SubliminalMessage

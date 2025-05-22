@@ -1,0 +1,40 @@
+/* Reality distortion effects */
+.reality-distorted {
+  animation: distort-reality 3s ease-in-out;
+}
+
+@keyframes distort-reality {
+  0% {
+    filter: none;
+  }
+  10% {
+    filter: hue-rotate(90deg) saturate(200%);
+  }
+  20% {
+    filter: hue-rotate(180deg) saturate(300%) brightness(1.2);
+  }
+  30% {
+    filter: hue-rotate(270deg) saturate(400%) brightness(1.4);
+  }
+  40% {
+    filter: hue-rotate(360deg) saturate(500%) brightness(1.6) contrast(1.2);
+  }
+  50% {
+    filter: invert(100%) hue-rotate(180deg) saturate(300%);
+  }
+  60% {
+    filter: hue-rotate(270deg) saturate(400%) brightness(1.4);
+  }
+  70% {
+    filter: hue-rotate(180deg) saturate(300%) brightness(1.2);
+  }
+  80% {
+    filter: hue-rotate(90deg) saturate(200%);
+  }
+  90% {
+    filter: hue-rotate(45deg) saturate(150%);
+  }
+  100% {
+    filter: none;
+  }
+}

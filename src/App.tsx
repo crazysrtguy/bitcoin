@@ -151,8 +151,8 @@ const App: React.FC = () => {
                   />
                   <DiamondHandsTraining />
                   <PriceProphecy />
-                  <ProphecyRoadmap />
                   <CultInitiation />
+                  <ProphecyRoadmap />
                   <HowToBuy />
                 </>
               } />

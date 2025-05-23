@@ -12,6 +12,7 @@ import DiamondHandsTraining from './components/DiamondHandsTraining';
 import PriceProphecy from './components/PriceProphecy';
 import CultInitiation from './components/CultInitiation';
 import BitcoinLore from './components/BitcoinLore';
+import SatoshiBook from './components/SatoshiBook';
 import HowToBuy from './components/HowToBuy';
 import ProphecyRoadmap from './components/ProphecyRoadmap';
 import Footer from './components/Footer';
@@ -57,6 +58,7 @@ const App: React.FC = () => {
   const [showWarning, setShowWarning] = useState(true);
   const [distortionLevel, setDistortionLevel] = useState(0);
   const [brainwashLevel, setBrainwashLevel] = useState(0);
+  // Zombie count kept but not actively used since ZombieHorde is commented out
   const [zombieCount, setZombieCount] = useState(0);
   const [floatingBitcoins, setFloatingBitcoins] = useState<{id: number, x: number, y: number}[]>([]);
   const bitcoinCount = React.useRef(0);
@@ -93,10 +95,13 @@ const App: React.FC = () => {
     }, 8000);
   };
 
+  // Commented out since ZombieHorde component is not being used
+  /*
   const handleZombieCreated = () => {
     setZombieCount(prev => prev + 1);
     setBrainwashLevel(prev => Math.min(prev + 0.5, 100));
   };
+  */
 
   const handleBrainwashLevelChange = (level: number) => {
     setDistortionLevel(level / 300); // Scale down for distortion effect
@@ -141,10 +146,13 @@ const App: React.FC = () => {
               <Route path="/" element={
                 <>
                   <BitcoinLore />
+                  <SatoshiBook />
+                  {/* Zombie Horde commented out to improve performance
                   <ZombieHorde
                     brainwashLevel={brainwashLevel}
                     onZombieCreated={handleZombieCreated}
                   />
+                  */}
                   <BitcoinJustifier />
                   <HopiumMeter
                     onEnlightenment={() => setBrainwashLevel(prev => Math.min(prev + 20, 100))}

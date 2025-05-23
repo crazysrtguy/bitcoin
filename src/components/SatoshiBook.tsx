@@ -15,6 +15,22 @@ const float = keyframes`
   100% { transform: translateY(0px); }
 `;
 
+const glowPulse = keyframes`
+  0%, 100% { text-shadow: 0 0 10px rgba(255, 102, 0, 0.5), 0 0 20px rgba(255, 102, 0, 0.3); }
+  50% { text-shadow: 0 0 20px rgba(255, 102, 0, 0.8), 0 0 30px rgba(255, 102, 0, 0.5); }
+`;
+
+const letterFloat = keyframes`
+  0%, 100% { transform: translateY(0); }
+  25% { transform: translateY(-3px); }
+  75% { transform: translateY(3px); }
+`;
+
+const letterRotate = keyframes`
+  0% { transform: rotateY(0deg); }
+  100% { transform: rotateY(360deg); }
+`;
+
 // Styled Components
 const BookSection = styled.section`
   min-height: 800px;
@@ -80,6 +96,41 @@ const BookDescription = styled(motion.p)`
     font-size: 1rem;
     margin-bottom: 20px;
     padding: 0 10px;
+  }
+`;
+
+const AnimatedLetter = styled.span<{ $delay: number, $color?: string }>`
+  display: inline-block;
+  animation: ${letterFloat} 2s ease-in-out infinite;
+  animation-delay: ${props => props.$delay}s;
+  color: ${props => props.$color || '#ffaa00'};
+  font-weight: bold;
+  text-shadow: 0 0 10px rgba(255, 102, 0, 0.5);
+
+  &:hover {
+    animation: ${letterRotate} 1s ease-in-out;
+    color: #ff6600;
+  }
+`;
+
+const AnimatedAcronym = styled.div`
+  font-size: 1.2rem;
+  margin: 20px 0;
+  padding: 10px;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
+  border: 1px solid rgba(255, 102, 0, 0.3);
+  animation: ${glowPulse} 3s infinite ease-in-out;
+
+  @media (max-width: 768px) {
+    font-size: 1rem;
+    margin: 15px 0;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 0.9rem;
+    margin: 10px 0;
+    padding: 8px;
   }
 `;
 
@@ -1029,6 +1080,30 @@ const SatoshiBook: React.FC = () => {
     };
   }, [currentPage]);
 
+  // Create animated text for the acronym
+  const renderAnimatedAcronym = () => {
+    const fullName = "Brainwashed Idiots Totally Convinced Of Inevitable Nirvana";
+    const words = fullName.split(' ');
+    const acronym = "BITCOIN";
+
+    return (
+      <AnimatedAcronym>
+        {words.map((word, index) => (
+          <React.Fragment key={index}>
+            <AnimatedLetter
+              $delay={index * 0.2}
+              $color={index === 0 ? '#ff6600' : undefined}
+            >
+              {word.charAt(0)}
+            </AnimatedLetter>
+            {word.slice(1)}
+            {index < words.length - 1 ? ' ' : ''}
+          </React.Fragment>
+        ))}
+      </AnimatedAcronym>
+    );
+  };
+
   return (
     <BookSection>
       <BookContainer>
@@ -1049,6 +1124,8 @@ const SatoshiBook: React.FC = () => {
         >
           The holy scriptures of our Bitcoin cult, written by the prophet himself
         </BookDescription>
+
+        {renderAnimatedAcronym()}
 
         <BookWrapper>
           <Book ref={bookRef} $mystical={isMystical}>

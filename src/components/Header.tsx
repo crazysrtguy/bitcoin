@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 import { motion, useAnimation } from 'framer-motion';
 
 const HeaderContainer = styled.header`
@@ -33,14 +33,82 @@ const Title = styled(motion.h1)`
   }
 `;
 
+const letterFloat = keyframes`
+  0%, 100% { transform: translateY(0); }
+  25% { transform: translateY(-5px); }
+  75% { transform: translateY(5px); }
+`;
+
+const letterRotate = keyframes`
+  0% { transform: rotateY(0deg); }
+  100% { transform: rotateY(360deg); }
+`;
+
+const glowPulse = keyframes`
+  0%, 100% { text-shadow: 0 0 10px rgba(255, 102, 0, 0.5), 0 0 20px rgba(255, 102, 0, 0.3); }
+  50% { text-shadow: 0 0 20px rgba(255, 102, 0, 0.8), 0 0 30px rgba(255, 102, 0, 0.5); }
+`;
+
 const Subtitle = styled(motion.div)`
   font-size: 1.5em;
   color: #ffaa00;
   margin-bottom: 20px;
   font-style: italic;
+  display: none; /* Hide the original subtitle */
 
   @media (max-width: 768px) {
     font-size: 1.2em;
+  }
+`;
+
+const AnimatedSubtitleContainer = styled.div`
+  margin: 30px auto;
+  padding: 20px 25px;
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.7), rgba(26, 0, 51, 0.7), rgba(51, 0, 102, 0.5));
+  border-radius: 15px;
+  border: 2px solid rgba(255, 102, 0, 0.4);
+  animation: ${glowPulse} 3s infinite ease-in-out;
+  max-width: 800px;
+  letter-spacing: 1px;
+  line-height: 1.6;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+
+  @media (max-width: 768px) {
+    padding: 15px 20px;
+    margin: 25px auto;
+  }
+
+  @media (max-width: 480px) {
+    padding: 12px 15px;
+    margin: 20px auto;
+  }
+`;
+
+const AnimatedLetter = styled.span<{ $delay: number, $color?: string }>`
+  display: inline-block;
+  animation: ${letterFloat} 2s ease-in-out infinite;
+  animation-delay: ${props => props.$delay}s;
+  color: ${props => props.$color || '#ffaa00'};
+  font-weight: bold;
+  font-size: 1.8em;
+  margin: 0 2px;
+  padding: 0 3px;
+  text-shadow: 0 0 10px rgba(255, 102, 0, 0.7);
+
+  &:hover {
+    animation: ${letterRotate} 1s ease-in-out;
+    color: #ff6600;
+    cursor: pointer;
+  }
+
+  @media (max-width: 768px) {
+    font-size: 1.5em;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 1.2em;
+    margin: 0 1px;
+    padding: 0 2px;
   }
 `;
 
@@ -244,6 +312,35 @@ const Header: React.FC = () => {
   const controls = useAnimation();
   const tokenAddressRef = useRef<HTMLSpanElement>(null);
 
+  // Function to render animated acronym
+  const renderAnimatedAcronym = () => {
+    const fullName = "Brainwashed Idiots Totally Convinced Of Inevitable Nirvana";
+    const words = fullName.split(' ');
+
+    return (
+      <AnimatedSubtitleContainer>
+        {words.map((word, index) => (
+          <React.Fragment key={index}>
+            <AnimatedLetter
+              $delay={index * 0.2}
+              $color={index === 0 ? '#ff6600' : undefined}
+            >
+              {word.charAt(0)}
+            </AnimatedLetter>
+            <span style={{
+              color: '#ffaa00',
+              fontWeight: 'bold',
+              textShadow: '0 0 5px rgba(255, 170, 0, 0.5)'
+            }}>
+              {word.slice(1)}
+            </span>
+            {index < words.length - 1 ? <span style={{ margin: '0 8px' }}></span> : ''}
+          </React.Fragment>
+        ))}
+      </AnimatedSubtitleContainer>
+    );
+  };
+
   // Solana token address - replace with your actual token address
   const tokenAddress = "8xpGJ2Zd8CwmQWmZQQwXVKKGvwrJpBJ9JFf6mwJPFJQM";
 
@@ -311,13 +408,13 @@ const Header: React.FC = () => {
           BITCOIN
         </Title>
 
-        <Subtitle
+        <motion.div
           initial={{ y: 100, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ duration: 0.8, delay: 0.2, type: "spring" }}
         >
-          Brainwashed Idiots Totally Convinced Of Inevitable Nirvana
-        </Subtitle>
+          {renderAnimatedAcronym()}
+        </motion.div>
 
         <motion.p
           animate={controls}
